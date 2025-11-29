@@ -35,46 +35,63 @@ export default function WelcomeScreen() {
   }
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-6">
-      <View className="items-center mb-12">
-        <Text className="text-4xl font-bold text-primary mb-2">Prynt</Text>
-        <Text className="text-xl text-gray-600 text-center">
-          Tipărire profesională{'\n'}la îndemâna ta
+    <View className="flex-1 bg-blue-50">
+      {/* Header Section */}
+      <View className="flex-1 items-center justify-center px-6">
+        {/* Logo Circle */}
+        <View className="w-24 h-24 bg-primary rounded-full items-center justify-center mb-6 shadow-lg">
+          <Text className="text-white text-4xl font-bold">P</Text>
+        </View>
+
+        {/* Brand */}
+        <Text className="text-5xl font-bold text-gray-900 mb-3">Prynt</Text>
+        <Text className="text-lg text-gray-600 text-center mb-2">
+          Tipărire profesională
         </Text>
+        <Text className="text-base text-gray-500 text-center mb-12">
+          Comenzi rapide • Livrare în toată țara
+        </Text>
+
+        {/* Action Buttons */}
+        <View className="w-full max-w-sm space-y-4">
+          <TouchableOpacity
+            className="bg-primary py-5 px-6 rounded-2xl shadow-lg active:scale-95"
+            onPress={() => router.push('/(auth)/login')}
+            style={{ transform: [{ scale: 1 }] }}
+          >
+            <Text className="text-white text-center font-bold text-lg">
+              Autentificare
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="bg-white border-2 border-primary py-5 px-6 rounded-2xl shadow-md active:scale-95"
+            onPress={() => router.push('/(auth)/register')}
+            style={{ transform: [{ scale: 1 }] }}
+          >
+            <Text className="text-primary text-center font-bold text-lg">
+              Creează cont gratuit
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="py-4 active:opacity-60"
+            onPress={() => router.push('/(tabs)/home')}
+          >
+            <Text className="text-gray-600 text-center font-medium">
+              Explorează fără cont →
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View className="w-full max-w-sm space-y-4">
-        <TouchableOpacity
-          className="bg-primary py-4 px-6 rounded-lg"
-          onPress={() => router.push('/(auth)/login')}
-        >
-          <Text className="text-white text-center font-semibold text-lg">
-            Autentificare
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="bg-white border-2 border-primary py-4 px-6 rounded-lg"
-          onPress={() => router.push('/(auth)/register')}
-        >
-          <Text className="text-primary text-center font-semibold text-lg">
-            Cont nou
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="py-3"
-          onPress={() => router.push('/(tabs)/home')}
-        >
-          <Text className="text-gray-500 text-center">
-            Continuă fără cont
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View className="absolute bottom-10">
-        <Text className="text-gray-400 text-sm">
-          © 2025 Prynt.ro
+      {/* Footer */}
+      <View className="pb-8 items-center">
+        <Text className="text-gray-400 text-sm mb-2">
+          🇷🇴 Fabricat în România
+        </Text>
+        <Text className="text-gray-400 text-xs">
+          © 2025 Prynt.ro • Toate drepturile rezervate
         </Text>
       </View>
     </View>

@@ -1,7 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function HomeScreen() {
+  const router = useRouter();
   const configurators = [
     { id: 'afise', title: 'Afișe', icon: 'image' },
     { id: 'banner', title: 'Bannere', icon: 'flag' },
@@ -13,51 +15,90 @@ export default function HomeScreen() {
   ];
 
   return (
-    <ScrollView className="flex-1 bg-white">
-      <View className="px-6 py-8">
-        <View className="mb-8">
-          <Text className="text-3xl font-bold text-gray-900 mb-2">
-            Bun venit la Prynt
+    <ScrollView className="flex-1 bg-gray-50">
+      {/* Hero Section */}
+      <View className="bg-primary px-6 pt-6 pb-8 rounded-b-3xl shadow-lg">
+        <Text className="text-white text-3xl font-bold mb-2">
+          👋 Bun venit!
+        </Text>
+        <Text className="text-blue-100 text-base">
+          Alege produsul și începe comanda
+        </Text>
+      </View>
+
+      <View className="px-6 py-6">
+        {/* Products Grid */}
+        <View className="mb-6">
+          <Text className="text-xl font-bold text-gray-900 mb-4">
+            Configuratoare disponibile
           </Text>
-          <Text className="text-gray-600 text-lg">
-            Alege tipul de produs dorit
-          </Text>
+          
+          <View className="space-y-3">
+            {configurators.map((item, index) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => router.push(`/config/${item.id}` as any)}
+                className="bg-white rounded-2xl p-5 flex-row items-center shadow-md active:scale-98"
+                activeOpacity={0.8}
+                style={{ 
+                  transform: [{ scale: 1 }],
+                  shadowColor: '#0ea5e9',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                }}
+              >
+                <View className="bg-blue-100 p-4 rounded-xl mr-4">
+                  <Ionicons name={item.icon as any} size={32} color="#0ea5e9" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-lg font-bold text-gray-900 mb-1">
+                    {item.title}
+                  </Text>
+                  <Text className="text-gray-500 text-sm">
+                    Configurează și comandă online
+                  </Text>
+                </View>
+                <View className="bg-primary/10 p-2 rounded-full">
+                  <Ionicons name="arrow-forward" size={20} color="#0ea5e9" />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
-        <View className="space-y-3">
-          {configurators.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              className="bg-white border border-gray-200 rounded-xl p-5 flex-row items-center shadow-sm"
-              activeOpacity={0.7}
-            >
-              <View className="bg-primary/10 p-3 rounded-lg mr-4">
-                <Ionicons name={item.icon as any} size={28} color="#0ea5e9" />
-              </View>
-              <View className="flex-1">
-                <Text className="text-lg font-semibold text-gray-900">
-                  {item.title}
-                </Text>
-                <Text className="text-gray-500 text-sm">
-                  Configurează și comandă
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <View className="mt-8 bg-primary/5 p-6 rounded-xl">
+        {/* Info Card */}
+        <View className="bg-blue-500 p-6 rounded-2xl shadow-lg mb-6">
           <View className="flex-row items-center mb-3">
-            <Ionicons name="information-circle" size={24} color="#0ea5e9" />
-            <Text className="text-lg font-semibold text-gray-900 ml-2">
-              Informații
+            <View className="bg-white/20 p-2 rounded-full mr-3">
+              <Ionicons name="rocket" size={24} color="white" />
+            </View>
+            <Text className="text-xl font-bold text-white">
+              Livrare rapidă
             </Text>
           </View>
-          <Text className="text-gray-600 leading-6">
-            Tipărire profesională cu livrare rapidă în toată România. 
-            Comenzi personalizate cu preview instant și calculare automată a prețului.
+          <Text className="text-blue-50 leading-6">
+            Tipărire profesională cu livrare în toată România. Preview instant și calcul automat al prețului.
           </Text>
+        </View>
+
+        {/* Features */}
+        <View className="flex-row space-x-3">
+          <View className="flex-1 bg-white p-4 rounded-xl shadow-sm">
+            <Text className="text-2xl mb-1">⚡</Text>
+            <Text className="text-sm font-semibold text-gray-900">Rapid</Text>
+            <Text className="text-xs text-gray-500">Comenzi în 2 minute</Text>
+          </View>
+          <View className="flex-1 bg-white p-4 rounded-xl shadow-sm">
+            <Text className="text-2xl mb-1">✨</Text>
+            <Text className="text-sm font-semibold text-gray-900">Calitate</Text>
+            <Text className="text-xs text-gray-500">Materiale premium</Text>
+          </View>
+          <View className="flex-1 bg-white p-4 rounded-xl shadow-sm">
+            <Text className="text-2xl mb-1">🚚</Text>
+            <Text className="text-sm font-semibold text-gray-900">Livrare</Text>
+            <Text className="text-xs text-gray-500">În toată țara</Text>
+          </View>
         </View>
       </View>
     </ScrollView>

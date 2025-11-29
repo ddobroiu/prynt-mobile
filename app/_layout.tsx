@@ -15,6 +15,9 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
+          contentStyle: {
+            backgroundColor: '#ffffff',
+          },
         }}
       >
         <Stack.Screen 
@@ -33,6 +36,18 @@ export default function RootLayout() {
         />
         <Stack.Screen 
           name="(tabs)" 
+          options={{ 
+            headerShown: false 
+          }} 
+        />
+        <Stack.Screen 
+          name="config/afise" 
+          options={{ 
+            headerShown: false 
+          }} 
+        />
+        <Stack.Screen 
+          name="config/[id]" 
           options={{ 
             headerShown: false 
           }} 
