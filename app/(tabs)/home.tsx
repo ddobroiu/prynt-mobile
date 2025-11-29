@@ -5,13 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 export default function HomeScreen() {
   const router = useRouter();
   const configurators = [
-    { id: 'afise', title: 'Afișe', icon: 'image' },
-    { id: 'banner', title: 'Bannere', icon: 'flag' },
-    { id: 'flayere', title: 'Flyere', icon: 'documents' },
-    { id: 'pliante', title: 'Pliante', icon: 'book' },
-    { id: 'autocolante', title: 'Autocolante', icon: 'pricetag' },
-    { id: 'canvas', title: 'Canvas', icon: 'color-palette' },
-    { id: 'tapet', title: 'Tapet', icon: 'grid' },
+    { id: 'afise', title: 'Afișe', icon: 'image', status: '✅', description: 'A3, A2, A1, A0' },
+    { id: 'banner', title: 'Bannere', icon: 'flag', status: '✅', description: 'Frontlit 440g/510g' },
+    { id: 'flayere', title: 'Flyere', icon: 'documents', status: '✅', description: 'A6, A5, 21×10cm' },
+    { id: 'pliante', title: 'Pliante', icon: 'book', status: '✅', description: 'Biguite 1-4 fețe' },
+    { id: 'autocolante', title: 'Autocolante', icon: 'pricetag', status: '🚧', description: 'În dezvoltare' },
+    { id: 'canvas', title: 'Canvas', icon: 'color-palette', status: '🚧', description: 'În dezvoltare' },
+    { id: 'tapet', title: 'Tapet', icon: 'grid', status: '🚧', description: 'În dezvoltare' },
   ];
 
   return (
@@ -52,11 +52,14 @@ export default function HomeScreen() {
                   <Ionicons name={item.icon as any} size={32} color="#0ea5e9" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-lg font-bold text-gray-900 mb-1">
-                    {item.title}
-                  </Text>
+                  <View className="flex-row items-center mb-1">
+                    <Text className="text-lg font-bold text-gray-900 mr-2">
+                      {item.title}
+                    </Text>
+                    <Text className="text-base">{item.status}</Text>
+                  </View>
                   <Text className="text-gray-500 text-sm">
-                    Configurează și comandă online
+                    {item.description}
                   </Text>
                 </View>
                 <View className="bg-primary/10 p-2 rounded-full">

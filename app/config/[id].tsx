@@ -1,21 +1,26 @@
+import React from 'react';
+import { useLocalSearchParams } from 'expo-router';
+
+// Import specific configurators
+import BannerConfigurator from './banner';
+import FlyereConfigurator from './flyere';
+import PlianteConfigurator from './pliante';
+
+// Fallback component for unsupported configurators
 import { View, Text, TouchableOpacity } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function GenericConfigScreen() {
+function FallbackConfigurator({ id }: { id: string }) {
   const router = useRouter();
-  const params = useLocalSearchParams();
-  
+
   const productNames: Record<string, string> = {
-    banner: 'Bannere',
-    flayere: 'Flyere',
-    pliante: 'Pliante',
     autocolante: 'Autocolante',
-    canvas: 'Canvas',
+    canvas: 'Canvas', 
     tapet: 'Tapet',
   };
 
-  const productName = productNames[params.id as string] || 'Produs';
+  const productName = productNames[id] || 'Produs';
 
   return (
     <View className="flex-1 bg-gray-50">
@@ -49,11 +54,28 @@ export default function GenericConfigScreen() {
           onPress={() => router.back()}
           className="bg-primary py-4 px-8 rounded-xl"
         >
-          <Text className="text-white font-bold text-base">
-            Înapoi la produse
+          <Text className="text-white font-semibold text-center">
+            Înapoi
           </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
+}
+
+export default function ConfiguratorScreen() {
+  const params = useLocalSearchParams();
+  const id = params.id as string;
+
+  // Route to specific configurators
+  switch (id) {
+    case 'banner':
+      return <BannerConfigurator />;
+    case 'flayere': 
+      return <FlyereConfigurator />;
+    case 'pliante':
+      return <PlianteConfigurator />;
+    default:
+      return <FallbackConfigurator id={id} />;
+  }
 }
