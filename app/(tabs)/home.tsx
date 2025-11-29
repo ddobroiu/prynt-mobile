@@ -1,9 +1,12 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { user } = useAuth();
+  
   const configurators = [
     { id: 'afise', title: 'Afișe', icon: 'image', status: '✅', description: 'A3, A2, A1, A0' },
     { id: 'banner', title: 'Bannere', icon: 'flag', status: '✅', description: 'Frontlit 440g/510g' },
@@ -19,11 +22,19 @@ export default function HomeScreen() {
       {/* Hero Section */}
       <View className="bg-primary px-6 pt-6 pb-8 rounded-b-3xl shadow-lg">
         <Text className="text-white text-3xl font-bold mb-2">
-          👋 Bun venit!
+          👋 Bun venit{user?.name ? `, ${user.name}` : ''}!
         </Text>
         <Text className="text-blue-100 text-base">
-          Alege produsul și începe comanda
+          {user ? 'Alege produsul și începe comanda' : 'Conectează-te pentru a comanda'}
         </Text>
+        {!user && (
+          <TouchableOpacity
+            className="bg-white/20 px-4 py-2 rounded-lg mt-3 self-start"
+            onPress={() => router.push('/login')}
+          >
+            <Text className="text-white font-semibold">Conectare</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <View className="px-6 py-6">

@@ -1,10 +1,11 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { AuthProvider } from '../contexts/AuthContext';
 import '../global.css';
 
 export default function RootLayout() {
   return (
-    <>
+    <AuthProvider>
       <StatusBar style="auto" />
       <Stack
         screenOptions={{
@@ -52,7 +53,14 @@ export default function RootLayout() {
             headerShown: false 
           }} 
         />
+        <Stack.Screen 
+          name="login" 
+          options={{ 
+            title: 'Autentificare',
+            presentation: 'modal'
+          }} 
+        />
       </Stack>
-    </>
+    </AuthProvider>
   );
 }

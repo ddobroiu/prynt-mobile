@@ -1,27 +1,26 @@
-import { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { getUser, logout, isAuthenticated, User } from '../../lib/auth';
+import React from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { 
+  User, 
+  Mail, 
+  MapPin, 
+  Package, 
+  Settings, 
+  LogOut,
+  ChevronRight
+} from 'lucide-react-native';
+import { useAuth } from '../../contexts/AuthContext';
+import { router } from 'expo-router';
 
 export default function AccountScreen() {
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  const loadUser = async () => {
-    const authenticated = await isAuthenticated();
-    setIsLoggedIn(authenticated);
-    
-    if (authenticated) {
-      const userData = await getUser();
-      setUser(userData);
-    }
-  };
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     Alert.alert(
@@ -29,113 +28,142 @@ export default function AccountScreen() {
       'Ești sigur că vrei să te deconectezi?',
       [
         { text: 'Anulează', style: 'cancel' },
-        {
-          text: 'Deconectează-te',
+        { 
+          text: 'Deconectare', 
           style: 'destructive',
-          onPress: async () => {
-            await logout();
+          onPress: () => {
+            logout();
             router.replace('/');
-          },
-        },
+          }
+        }
       ]
     );
   };
 
-  if (!isLoggedIn) {
+  if (!user) {
     return (
-      <View className="flex-1 bg-white">
-        <View className="px-6 py-8">
-          <View className="items-center mb-8">
-            <View className="bg-gray-100 p-6 rounded-full mb-4">
-              <Ionicons name="person" size={48} color="#9ca3af" />
-            </View>
-            <Text className="text-2xl font-bold text-gray-900 mb-2">
-              Cont neautentificat
-            </Text>
-            <Text className="text-gray-600 text-center">
-              Autentifică-te pentru a accesa contul
-            </Text>
-          </View>
-
+      <SafeAreaView className="flex-1 bg-white">
+        <View className="flex-1 justify-center items-center px-6">
+          <User size={64} color="#6B7280" />
+          <Text className="text-xl font-semibold text-gray-900 mt-4 mb-2">
+            Nu ești conectat
+          </Text>
+          <Text className="text-gray-600 text-center mb-8">
+            Conectează-te pentru a vedea contul tău și comenzile
+          </Text>
           <TouchableOpacity
-            className="bg-primary py-4 rounded-lg mb-3"
-            onPress={() => router.push('/(auth)/login')}
+            className="bg-blue-600 px-8 py-3 rounded-lg"
+            onPress={() => router.push('/login')}
           >
-            <Text className="text-white text-center font-semibold text-lg">
-              Autentificare
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="bg-white border-2 border-primary py-4 rounded-lg"
-            onPress={() => router.push('/(auth)/register')}
-          >
-            <Text className="text-primary text-center font-semibold text-lg">
-              Cont nou
-            </Text>
+            <Text className="text-white font-semibold">Conectare</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
-  const menuItems = [
-    { id: 'profile', title: 'Profilul meu', icon: 'person-outline' },
-    { id: 'orders', title: 'Comenzile mele', icon: 'receipt-outline' },
-    { id: 'addresses', title: 'Adrese', icon: 'location-outline' },
-    { id: 'invoices', title: 'Facturi', icon: 'document-text-outline' },
-    { id: 'settings', title: 'Setări', icon: 'settings-outline' },
-    { id: 'help', title: 'Ajutor', icon: 'help-circle-outline' },
-  ];
-
   return (
-    <ScrollView className="flex-1 bg-gray-50">
-      <View className="px-6 py-8">
-        <View className="bg-white rounded-xl p-6 mb-6 shadow-sm">
-          <View className="items-center">
-            <View className="bg-primary/10 p-6 rounded-full mb-4">
-              <Ionicons name="person" size={48} color="#0ea5e9" />
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <ScrollView className="flex-1">
+        {/* Header Profile */}
+        <View className="bg-white px-6 py-8">
+          <View className="flex-row items-center">
+            <View className="w-16 h-16 bg-blue-100 rounded-full items-center justify-center">
+              <User size={32} color="#3B82F6" />
             </View>
-            <Text className="text-2xl font-bold text-gray-900 mb-1">
-              {user?.name || 'Utilizator'}
-            </Text>
-            <Text className="text-gray-600">
-              {user?.email}
-            </Text>
+            <View className="ml-4 flex-1">
+              <Text className="text-xl font-semibold text-gray-900">
+                {user.name || 'Utilizator'}
+              </Text>
+              <Text className="text-gray-600 mt-1">
+                {user.email}
+              </Text>
+            </View>
           </View>
         </View>
 
-        <View className="bg-white rounded-xl overflow-hidden shadow-sm mb-6">
-          {menuItems.map((item, index) => (
+        {/* Menu Items */}
+        <View className="mt-6">
+          {/* Profile Settings */}
+          <View className="bg-white">
             <TouchableOpacity
-              key={item.id}
-              className={`flex-row items-center p-5 ${
-                index !== menuItems.length - 1 ? 'border-b border-gray-100' : ''
-              }`}
-              activeOpacity={0.7}
+              className="flex-row items-center px-6 py-4 border-b border-gray-100"
+              onPress={() => {
+                // TODO: Navigate to profile edit screen
+                Alert.alert('Info', 'Editarea profilului va fi implementată în curând');
+              }}
             >
-              <Ionicons name={item.icon as any} size={24} color="#0ea5e9" />
-              <Text className="flex-1 ml-4 text-gray-900 font-medium text-base">
-                {item.title}
-              </Text>
-              <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+              <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center">
+                <Settings size={20} color="#3B82F6" />
+              </View>
+              <View className="ml-4 flex-1">
+                <Text className="text-gray-900 font-medium">Date personale</Text>
+                <Text className="text-gray-500 text-sm">Editează numele și email-ul</Text>
+              </View>
+              <ChevronRight size={20} color="#9CA3AF" />
             </TouchableOpacity>
-          ))}
+
+            <TouchableOpacity
+              className="flex-row items-center px-6 py-4 border-b border-gray-100"
+              onPress={() => {
+                // TODO: Navigate to addresses screen
+                Alert.alert('Info', 'Adresele vor fi implementate în curând');
+              }}
+            >
+              <View className="w-10 h-10 bg-green-100 rounded-full items-center justify-center">
+                <MapPin size={20} color="#10B981" />
+              </View>
+              <View className="ml-4 flex-1">
+                <Text className="text-gray-900 font-medium">Adresele mele</Text>
+                <Text className="text-gray-500 text-sm">Gestionează adresele de livrare</Text>
+              </View>
+              <ChevronRight size={20} color="#9CA3AF" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              className="flex-row items-center px-6 py-4"
+              onPress={() => {
+                // TODO: Navigate to orders screen
+                Alert.alert('Info', 'Comenzile vor fi implementate în curând');
+              }}
+            >
+              <View className="w-10 h-10 bg-orange-100 rounded-full items-center justify-center">
+                <Package size={20} color="#F59E0B" />
+              </View>
+              <View className="ml-4 flex-1">
+                <Text className="text-gray-900 font-medium">Comenzile mele</Text>
+                <Text className="text-gray-500 text-sm">Istoric și status comenzi</Text>
+              </View>
+              <ChevronRight size={20} color="#9CA3AF" />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <TouchableOpacity
-          className="bg-red-50 border border-red-200 py-4 rounded-lg"
-          onPress={handleLogout}
-        >
-          <Text className="text-red-600 text-center font-semibold text-lg">
-            Deconectare
-          </Text>
-        </TouchableOpacity>
+        {/* Account Actions */}
+        <View className="mt-6 bg-white">
+          <TouchableOpacity
+            className="flex-row items-center px-6 py-4"
+            onPress={handleLogout}
+          >
+            <View className="w-10 h-10 bg-red-100 rounded-full items-center justify-center">
+              <LogOut size={20} color="#EF4444" />
+            </View>
+            <View className="ml-4 flex-1">
+              <Text className="text-red-600 font-medium">Deconectare</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
-        <Text className="text-gray-400 text-center text-sm mt-8">
-          Versiunea 1.0.0
-        </Text>
-      </View>
-    </ScrollView>
+        {/* App Info */}
+        <View className="mt-8 px-6 pb-8">
+          <Text className="text-center text-gray-500 text-sm">
+            Prynt Mobile v1.0.0
+          </Text>
+          <Text className="text-center text-gray-400 text-xs mt-1">
+            © 2025 Prynt. Toate drepturile rezervate.
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
